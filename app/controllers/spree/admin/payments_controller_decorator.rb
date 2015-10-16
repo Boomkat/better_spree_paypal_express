@@ -1,8 +1,6 @@
 Spree::Admin::PaymentsController.class_eval do
   def paypal_refund
-    if request.get?
-      #
-    elsif request.post?
+    if request.post?
       response = @payment.payment_method.refund(@payment, params[:refund_amount])
       if response.success?
         flash[:success] = Spree.t(:refund_successful, :scope => 'paypal')
