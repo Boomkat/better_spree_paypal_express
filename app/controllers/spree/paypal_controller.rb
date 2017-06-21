@@ -76,7 +76,7 @@ module Spree
 
     def line_item(item)
       {
-          :Name => item.product.name,
+          :Name => line_item_name(item),
           :Number => item.variant.sku,
           :Quantity => item.quantity,
           :Amount => {
@@ -85,6 +85,17 @@ module Spree
           },
           :ItemCategory => "Physical"
       }
+    end
+
+    def line_item_name(item)
+      release_format = item.variant.definitive_release_format
+
+      [
+        release_format.catalogue_number,
+        release_format.display_format
+      ].compact.join(' ')
+    rescue StandardError
+      "Item #{item.variant_id}"
     end
 
     def express_checkout_request_details order, items
